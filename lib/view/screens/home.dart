@@ -55,20 +55,25 @@ class WallpaperGrid extends StatelessWidget {
               )),
               ),
           ),
-        // ListView(
-        //   scrollDirection: Axis.vertical,
-        //   children: [
-        //       Row(
-        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //       children: [
-        //       Text("sweet"),
-        //       Text("sweet"),
-        //       Text("sweet"),
-        //       Text("sweet"),
-        //       Text("sweet")
-        //     ],),
-        //   ],
-        // ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Container(
+            height: 50,
+            child: ListView(
+              scrollDirection: Axis.vertical,
+              children: [
+                  Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                  Text("sweet"),
+                  Text("sweet"),
+                  Text("sweet"),
+                  Text("sweet"),
+                ],),
+              ],
+            ),
+          ),
+        ),
           Expanded(
             child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

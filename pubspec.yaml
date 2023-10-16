@@ -41,9 +41,10 @@ dependencies:
   dio: ^5.3.3
   permission_handler: ^11.0.0
   path_provider: ^2.1.1
-  image_downloader: ^0.31.0
-  get: any
-  open_file: ^3.2.1
+  # image_downloader: ^0.31.0
+  open_file: ^3.3.2
+  get: ^4.6.5
+  flutter_cache_manager: ^3.3.1
 
 
 dev_dependencies:
