@@ -5,7 +5,7 @@ import 'package:walpaper_app/model/model.dart';
 
 Future<List<UnsplashImage>> fetchWallpapers() async {
   final response = await http.get(
-    Uri.parse('https://api.unsplash.com/photos/random?count=10'), // Replace with your API endpoint
+    Uri.parse('https://api.unsplash.com/photos/random?count=20'), // Replace with your API endpoint
     headers: {
       'Authorization': 'Client-ID UJjdKF3XNCT6meGgD_BDMT6UUV6t-IDVQQ7racv4Dlc', // Replace with your API key
     },

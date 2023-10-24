@@ -1,5 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:walpaper_app/controller/fetch_walpaper.dart';
+import 'package:walpaper_app/model/category_model.dart';
 import 'package:walpaper_app/model/model.dart';
 import 'package:walpaper_app/view/screens/walpaper_view.dart';
 
@@ -26,11 +29,23 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class WallpaperGrid extends StatelessWidget {
+class WallpaperGrid extends StatefulWidget {
   final List<UnsplashImage> images;
 
   WallpaperGrid({required this.images});
 
+  @override
+  State<WallpaperGrid> createState() => _WallpaperGridState();
+}
+
+class _WallpaperGridState extends State<WallpaperGrid> {
+ List<CategorieModel> categories = [];
+
+@override
+  void initState() {
+    categories = getCategories();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,22 +71,21 @@ class WallpaperGrid extends StatelessWidget {
               ),
           ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 5),
           child: Container(
-            height: 50,
-            child: ListView(
-              scrollDirection: Axis.vertical,
-              children: [
-                  Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                  Text("sweet"),
-                  Text("sweet"),
-                  Text("sweet"),
-                  Text("sweet"),
-                ],),
-              ],
-            ),
+            height: 80,
+            child:ListView.builder(
+                    padding: EdgeInsets.symmetric(horizontal: 24),
+                    itemCount: categories.length,
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      /// Create List Item tile
+                      return CategoriesTile(
+                        imgUrls: categories[index].imgUrl,
+                        categorie: categories[index].categorieName,
+                      );
+                    }),
           ),
         ),
           Expanded(
@@ -81,15 +95,15 @@ class WallpaperGrid extends StatelessWidget {
                 mainAxisSpacing: 10.0,
                 crossAxisSpacing: 10.0,
               ),
-              itemCount: images.length,
+              itemCount: widget.images.length,
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (
-                    (context) => WalpaperView(imageUrl: images[index].imageUrl,))));
+                    (context) => WalpaperView(imageUrl: widget.images[index].imageUrl,))));
                   },
                   child: Image.network(
-                    images[index].imageUrl,
+                    widget.images[index].imageUrl,
                     fit: BoxFit.cover,
                   ),
                 );
@@ -97,6 +111,101 @@ class WallpaperGrid extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+class CategoriesTile extends StatelessWidget {
+  final String imgUrls, categorie;
+
+  CategoriesTile({required this.imgUrls, required this.categorie});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        // Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //         builder: (context) => CategorieScreen(
+        //               categorie: categorie,
+        //             )));
+      },
+      child: Container(
+        margin: EdgeInsets.only(right: 8),
+        child: kIsWeb
+            ? Column(
+                children: <Widget>[
+                  ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: kIsWeb
+                          ? Image.network(
+                              imgUrls,
+                              height: 50,
+                              width: 100,
+                              fit: BoxFit.cover,
+                            )
+                          : CachedNetworkImage(
+                              imageUrl: imgUrls,
+                              height: 50,
+                              width: 100,
+                              fit: BoxFit.cover,
+                            )),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  Container(
+                      width: 100,
+                      alignment: Alignment.center,
+                      child: Text(
+                        categorie,
+                        style: TextStyle(
+                            color: Colors.black54,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Overpass'),
+                      )),
+                ],
+              )
+            : Stack(
+                children: <Widget>[
+                  ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: kIsWeb
+                          ? Image.network(
+                              imgUrls,
+                              height: 50,
+                              width: 100,
+                              fit: BoxFit.cover,
+                            )
+                          : CachedNetworkImage(
+                              imageUrl: imgUrls,
+                              height: 50,
+                              width: 100,
+                              fit: BoxFit.cover,
+                            )),
+                  Container(
+                    height: 50,
+                    width: 100,
+                    decoration: BoxDecoration(
+                      color: Colors.black26,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  Container(
+                      height: 50,
+                      width: 100,
+                      alignment: Alignment.center,
+                      child: Text(
+                        categorie ?? "Yo Yo",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'Overpass'),
+                      ))
+                ],
+              ),
       ),
     );
   }
